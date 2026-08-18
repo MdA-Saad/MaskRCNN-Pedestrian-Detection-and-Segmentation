@@ -1,16 +1,13 @@
 # MaskRCNN-Pedestrian-Detection-and-Segmentation
 Pedestrian detection and segmentation using Mask R-CNN on the Penn-Fudan dataset.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MdA-Saad/MaskRCNN-Pedestrian-Detection-and-Segmentation/blob/main/pedestriansDetection.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1QPgeKBRzJLzAUPXQWDrML92DVu8tJF4v?usp=sharing)
 [PennFudanPed](https://www.cis.upenn.edu/~jshi/ped_html/) dataset for pedestrian detection and instance segmentation.
-
-Here is a deep-dive technical overview of the theoretical concepts powering this project. You can add this directly to your project documentation, `README.md`, or personal notes to solidify the underlying computer vision and deep learning concepts.
 
 ---
 
-## 📚 Core Theoretical Framework
-
-To understand Mask R-CNN, it helps to place it along the evolution of computer vision tasks. While basic **Object Detection** predicts bounding boxes $(x, y, w, h)$ and class labels, and **Semantic Segmentation** labels every pixel in an image by class without distinguishing individual objects, **Instance Segmentation** combines both. It detects every individual object of interest and delineates a precise, pixel-level binary mask for each single instance.
+## Theory
+While basic **Object Detection** predicts bounding boxes $(x, y, w, h)$ and class labels, and **Semantic Segmentation** labels every pixel in an image by class without distinguishing individual objects, **Instance Segmentation** combines both. It detects every individual object of interest and delineates a precise, pixel-level binary mask for each single instance.
 
 ```
 +---------------------+---------------------------------------------------------+
@@ -22,10 +19,9 @@ To understand Mask R-CNN, it helps to place it along the evolution of computer v
 +---------------------+---------------------------------------------------------+
 
 ```
-
 ---
 
-## 1. The Architectural Evolution to Mask R-CNN
+## Evolution to R-CNN Models
 
 Mask R-CNN is the culmination of a multi-year evolution in region-based convolutional neural networks.
 
@@ -51,7 +47,7 @@ Mask R-CNN extends Faster R-CNN by adding a **small parallel branch** that outpu
 
 ---
 
-## 2. Key Architectural Components
+## Key Architectural Components of MaskRCNN
 
 ### Backbone Network: ResNet & Residual Learning
 
@@ -92,7 +88,7 @@ By evaluating features at four regularly sampled points within each RoI bin and 
 
 ---
 
-## 3. Multi-Task Loss Formulation
+## Multi-Task Loss Formulation
 
 During training, Mask R-CNN optimizes a multi-task loss function defined on each candidate RoI:
 
@@ -106,7 +102,7 @@ $$\mathcal{L} = \mathcal{L}_{\text{cls}} + \mathcal{L}_{\text{box}} + \mathcal{L
 
 ---
 
-## 4. Evaluation Metrics: COCO Mean Average Precision (mAP)
+## Evaluation Metrics: COCO Mean Average Precision (mAP)
 
 Evaluating detection and segmentation models relies on comparing predicted outputs against ground-truth labels using **Intersection over Union (IoU)**:
 
@@ -140,23 +136,6 @@ This computes average precision across **10 distinct IoU thresholds** ranging fr
 * Higher thresholds ($0.85+$) heavily penalize loose masks or poorly aligned bounding boxes, rewarding precise spatial localization.
 
 
-Here is a complete, professional `README.md` for your project. It includes Mermaid diagrams to visually map out your data pipeline and training loop, making it immediately clear to anyone viewing your repository how the architecture functions.
-
-I have structured the setup instructions to utilize the `uv` package manager for fast, isolated environment syncing, and included a section on how this 2D segmentation fits into broader multi-view applications.
-
-You can copy this block exactly as it is and commit it to your GitHub repository.
-
----
-
-```markdown
-# Pedestrian Instance Segmentation with Mask R-CNN
-
-A robust PyTorch implementation of Mask R-CNN for pedestrian detection and instance segmentation, trained on the Penn-Fudan Database. This project leverages the modern `torchvision.tv_tensors` API to handle complex data augmentations and bounding box transformations natively.
-
-## 🚀 Overview
-
-This repository provides a complete pipeline for training, evaluating, and visualizing a Mask R-CNN model (ResNet-50-FPN backbone). It includes a custom COCO evaluation integration to calculate industry-standard Mean Average Precision (mAP) for both bounding boxes and segmentation masks.
-
 ### Architecture & Pipeline
 
 ```mermaid
@@ -182,34 +161,7 @@ graph TD
     end
 
 ```
-
-## 🛠️ Installation & Setup
-
-To manage project dependencies quickly and ensure strict environment isolation, it is recommended to use the `uv` package manager.
-
-**1. Clone the repository:**
-
-```bash
-git clone [https://github.com/yourusername/pedestrian-detection-maskrcnn.git](https://github.com/yourusername/pedestrian-detection-maskrcnn.git)
-cd pedestrian-detection-maskrcnn
-
-```
-
-**2. Initialize the environment and install dependencies:**
-
-```bash
-# Create a virtual environment
-uv venv
-
-# Activate the environment
-source .venv/bin/activate
-
-# Install required packages
-uv pip install torch torchvision pycocotools matplotlib numpy tqdm tensorboard
-
-```
-
-## 🧠 Training Workflow
+## Training Workflow
 
 The training loop features automated early stopping, learning rate scheduling, and real-time TensorBoard logging for loss metrics and COCO evaluation scores.
 
@@ -237,50 +189,15 @@ sequenceDiagram
 
 ```
 
-**To start training:**
-Ensure the Penn-Fudan dataset is downloaded and extracted to the `data/` directory, then run:
+## Result
+![Pedestrain Segmentation loss curve](output/loss_curves.png)
+![Pedestrain Segmentation loss curve](output/result.png)
 
-```bash
-python copy_of_pedestriansdetection.py
+baseline_bbox_mAP_50_95	0.21986406918975912
+baseline_segm_mAP_50_95	0.16675564427760964
+final_train_loss	0.1746143377659952
+final_val_loss	0.22564405882183244
 
-```
-
-Checkpoints will be saved automatically to your configured output directory as `best_maskrcnn_pennfudan.pth`.
-
-## 🔍 Inference & Visualization
-
-The repository includes a dedicated inference function that safely decouples the saved model weights from the training loop, moving output tensors to the CPU for visualization.
-
-To run inference on a custom image or a validation sample:
-
-```python
-from your_script import run_inference
-
-# Define the path to your trained weights
-weights_path = "./outputs/best_maskrcnn_pennfudan.pth"
-
-# Run inference and visualize (Confidence threshold defaults to 0.7)
-run_inference(model_weights_path=weights_path, image_index=10, conf_threshold=0.75)
-
-```
-
-## 🌐 Future Applications
-
-The highly accurate binary masks generated by this model are designed to act as a robust preprocessing layer. By isolating pedestrians, these masks can be utilized to filter out dynamic objects prior to running feature matching (e.g., ORB) and multi-view 3D camera calibration algorithms, significantly reducing noise in structure-from-motion (SfM) pipelines.
-
-```
-
-```
-
-
-
-
-## Highlights
-- **71.3% mAP@[0.5:0.95]** for bounding box detection  
-- **69.0% mAP@[0.5:0.95]** for instance segmentation  
-- Full COCO-compatible evaluation using `pycocotools`  
-- Custom dataset class with mask-to-bbox conversion and size metadata  
-- Visualization of predictions with `torchvision.utils.draw_bounding_boxes` and `draw_segmentation_masks`
 
 ## Tech Stack
 PyTorch • TorchVision • COCO API • NumPy • Matplotlib
