@@ -59,7 +59,6 @@ $$y = F(x) + x$$
 
 * **Practical Example:** If an intermediate layer learns nothing useful, the weights $F(x)$ can decay to zero, leaving $y = x$. This acts as an identity shortcut, allowing gradients to flow unimpeded through hundreds of layers.
 
----
 
 ### Feature Pyramid Network (FPN)
 
@@ -73,7 +72,6 @@ FPN addresses this by constructing a pyramid of multi-scale feature maps:
 
 As a result, the RPN can detect small pedestrians using early, high-resolution feature maps and large pedestrians using deeper, semantically rich feature maps.
 
----
 
 ### RoIAlign: Fixing the Spatial Misalignment
 
@@ -193,11 +191,15 @@ sequenceDiagram
 ![Pedestrain Segmentation loss curve](output/loss_curves.png)
 ![Pedestrain Segmentation loss curve](output/result.png)
 
-baseline_bbox_mAP_50_95	0.21986406918975912
-baseline_segm_mAP_50_95	0.16675564427760964
-final_train_loss	0.1746143377659952
-final_val_loss	0.22564405882183244
+Final Evaluation Metrics:
 
+    Baseline BBox mAP (50-95): 0.2198
+
+    Baseline Segm mAP (50-95): 0.1667
+
+    Final Train Loss: 0.1746
+
+    Final Validation Loss: 0.2256
 
 ## Tech Stack
 PyTorch • TorchVision • COCO API • NumPy • Matplotlib
